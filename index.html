@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundraising School by 30X - Master the Art of Fundraising</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font family -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Paleta de Colores 30X */
+        :root {
+            --color-black-power: #010101;
+            --color-green-x: #eeff8d; /* Énfasis principal */
+            --color-cream-movement: #f2f2f2; /* Texto principal */
+            --color-grey-vibration: #414242; /* Texto secundario/Bordes */
+            --color-orange-impact: #ffa46f; /* Acento CTA */
+            --color-beige-growth: #dcd5c3; /* Fondo secundario (usado para cards) */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-black-power);
+            color: var(--color-cream-movement);
+        }
+
+        .container-padding {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        @media (min-width: 640px) {
+            .container-padding {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+        
+        .accent-green {
+            color: var(--color-green-x);
+        }
+
+        /* Estilo para Botones CTA */
+        .cta-button {
+            background-color: var(--color-black-power);
+            border: 2px solid var(--color-orange-impact);
+            color: var(--color-orange-impact);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 164, 111, 0.4);
+        }
+        .cta-button:hover {
+            background-color: var(--color-orange-impact);
+            color: var(--color-black-power);
+            box-shadow: 0 6px 20px rgba(255, 164, 111, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Tool Card Styles (used for the interactive toolbox) */
+        .tool-card {
+            background-color: var(--color-black-power); /* Changed for contrast */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid var(--color-grey-vibration);
+        }
+        
+        /* Testimonial Card Style */
+        .testimonial-card {
+            background-color: var(--color-grey-vibration);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border-left: 4px solid var(--color-green-x);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease-out;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(238, 255, 141, 0.3);
+        }
+
+
+        .tab-button {
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+        }
+        .tab-button.active {
+            border-bottom-color: var(--color-green-x);
+            color: var(--color-green-x);
+            font-weight: 700;
+        }
+
+        /* Existing styles for other sections (Curriculum, Speakers, etc.) */
+        .curriculum-details {
+            background-color: var(--color-black-power);
+            border: 1px solid var(--color-grey-vibration);
+            transition: all 0.3s ease-in-out;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            max-width: 45rem;
+        }
+        .curriculum-details:hover {
+            border-left: 4px solid var(--color-green-x);
+            border-color: var(--color-green-x);
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(238, 255, 141, 0.3);
+        }
+        
+        .module-summary-custom {
+            list-style: none;
+            position: relative;
+            padding-right: 2rem;
+        }
+        .module-summary-custom::after {
+            content: '+';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: content 0.3s, transform 0.3s;
+            color: var(--color-green-x);
+            font-weight: bold;
+        }
+        details[open] .module-summary-custom::after {
+            content: '-';
+        }
+
+        .guarantee-section {
+            background-color: var(--color-beige-growth);
+            color: var(--color-black-power);
+        }
+        
+        .video-placeholder {
+            position: relative;
+            padding-top: 56.25%;
+            width: 100%;
+            background-color: var(--color-grey-vibration);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--color-black-power);
+        }
+
+        .video-placeholder-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .custom-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .speaker-item {
+            transition: transform 0.3s ease-out;
+            cursor: pointer;
+        }
+        .speaker-photo-placeholder {
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-out;
+            background-color: var(--color-grey-vibration);
+        }
+        .speaker-item:hover {
+            transform: scale(1.05);
+        }
+        .speaker-item:hover .speaker-photo-placeholder {
+            box-shadow: 0 0 20px var(--color-green-x), 0 0 8px var(--color-green-x) inset;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--color-green-x);
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-black border-b border-gray-700 shadow-xl">
+        <div class="max-w-7xl mx-auto py-4 container-padding flex justify-between items-center">
+            <!-- Logo: Fundraising School by 30X -->
+            <a href="#" class="text-2xl font-extrabold tracking-tight text-white">
+                <span class="text-white">Fundraising School by </span><span class="accent-green">30X</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- 1. Hero Section -->
+        <section class="pt-16 pb-12 md:pt-24 md:pb-16 bg-black">
+            <div class="max-w-4xl mx-auto container-padding text-center">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-widest accent-green mb-3">
+                        FOR ENTREPRENEURS. BY ENTREPRENEURS.
+                    </p>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
+                        Master the Art of Fundraising
+                    </h1>
+                    <p class="text-xl sm:text-2xl text-gray-400 mb-6">
+                        The exclusive, 3-week intensive program to structure your capital raise with top 1% founders. Nov 25th – Dec 13th.
+                    </p>
+                    <p class="text-lg font-medium text-gray-300 mb-10">
+                        Hosted by <span class="text-white font-semibold">Andrés Bilbao</span> & <span class="text-white font-semibold">Angelica Carrillo</span>
+                    </p>
+
+                    <a href="#apply-now" class="cta-button inline-block px-12 py-4 text-xl font-bold rounded-xl shadow-lg transform transition-all duration-300">
+                        APPLY NOW TO START SELECTION PROCESS
+                    </a>
+                    
+                    <div class="mt-8">
+                        <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-8 text-base text-gray-300">
+                            <div class="flex items-center justify-center">
+                                <span class="accent-green mr-3 text-xl">&#10003;</span>
+                                <span class="text-lg font-bold text-white">Limited Seats Available</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="accent-green mr-3 text-xl">&#10003;</span>
+                                <span class="text-lg font-bold text-white">Half Scholarships Available</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Video & Scarcity/Guarantee Bar (What is Fundraising School?) -->
+        <section class="guarantee-section border-t-4 border-b-4 border-black py-12 md:py-16">
+            <div class="max-w-4xl mx-auto container-padding text-center">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-black mb-6">
+                    What is Fundraising School?
+                </h2>
+                <div class="video-placeholder mb-10">
+                    <div class="video-placeholder-content">
+                        <svg class="w-16 h-16 text-white opacity-80" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                        </svg>
+                        <p class="text-lg text-gray-300 mt-2">Video Placeholder</p>
+                    </div>
+                </div>
+                <p class="text-base sm:text-lg font-medium border-t pt-4 border-gray-600">
+                    <span class="font-extrabold mr-2" style="color: #ff5733;">100% MONEY-BACK GUARANTEE:</span> If you can’t apply the knowledge and fundraise, we guarantee your money back.
+                </p>
+            </div>
+        </section>
+        
+        <!-- 3. Hosts Section -->
+        <section class="py-16 bg-black border-b border-gray-800">
+            <div class="max-w-5xl mx-auto container-padding text-center">
+                <h2 class="text-3xl font-bold accent-green mb-12">Your Hosts</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 bg-gray-900 rounded-full mb-4 flex items-center justify-center text-4xl font-bold text-gray-600 border-4 border-green-x" style="border-color: var(--color-green-x);">AB</div>
+                        <h3 class="text-2xl font-semibold text-white">Andres Bilbao</h3>
+                        <p class="text-lg accent-green">Founder & Investor</p>
+                        <p class="text-gray-400 mt-2 max-w-sm">Serial entrepreneur with a track record of building and scaling ventures. He brings the raw, actionable truth of the fundraising trenches.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 bg-gray-900 rounded-full mb-4 flex items-center justify-center text-4xl font-bold text-gray-600 border-4 border-green-x" style="border-color: var(--color-green-x);">AC</div>
+                        <h3 class="text-2xl font-semibold text-white">Angelica Carrillo</h3>
+                        <p class="text-lg accent-green">Strategic Partner</p>
+                        <p class="text-gray-400 mt-2 max-w-sm">Expert in corporate strategy and scaling operations, providing a crucial perspective on investor due diligence and long-term equity health.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Past Speakers Section (Social Proof / For Entrepreneurs, By Entrepreneurs) -->
+        <section class="py-16 border-b border-gray-800" style="background-color: var(--color-grey-vibration);">
+            <div class="max-w-6xl mx-auto container-padding text-center">
+                <h2 class="text-4xl font-extrabold text-white mb-4 accent-green uppercase">FOR ENTREPRENEURS, BY ENTREPRENEURS</h2>
+                <p class="text-xl text-gray-400 mb-6">You won't get generic advice. You will get the exact playbook, pitch decks, and investor simulation used by those who have built multi-million dollar companies.</p>
+                <p class="text-xl text-white font-bold mb-12"><span class="accent-green">YOUR NETWORK IS YOUR NET WORTH:</span> Connect with fellow visionaries, and redefine what’s possible for your business. Past speakers include:</p>
+
+                <!-- Scrollable Speaker List -->
+                <div class="flex overflow-x-auto pb-4 space-x-8 custom-scrollbar">
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Founder A</p>
+                        <p class="text-xs accent-green">Company X</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">VC Partner</p>
+                        <p class="text-xs accent-green">Firm Y</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Angel Investor</p>
+                        <p class="text-xs accent-green">Ecosystem Z</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Exited Founder</p>
+                        <p class="text-xs accent-green">Unicorn Co.</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Softbank</p>
+                        <p class="text-xs accent-green">Former Host</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Strategic CFO</p>
+                        <p class="text-xs accent-green">Public Company</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Top Angel</p>
+                        <p class="text-xs accent-green">Syndicate</p>
+                    </div>
+                    <div class="speaker-item flex flex-col items-center flex-shrink-0 w-32">
+                        <div class="speaker-photo-placeholder w-24 h-24 rounded-full mb-2 flex items-center justify-center text-gray-500"></div>
+                        <p class="text-sm font-semibold text-white">Growth Partner</p>
+                        <p class="text-xs accent-green">Fund D</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Curriculum Section (The 3 week program curriculum) -->
+        <section class="py-16 md:py-20 bg-black border-b border-gray-800">
+            <div class="max-w-6xl mx-auto container-padding">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-center mb-12 text-white">The <span class="accent-green">3-week program curriculum</span></h2>
+                
+                <div class="space-y-6 flex flex-col items-center">
+                    
+                    <details class="curriculum-details w-full md:ml-0 md:mr-auto" open>
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <div>
+                                <h3 class="text-2xl font-bold accent-green mb-1">Module 1: How to Get Into Y Combinator</h3>
+                                <p class="text-lg text-gray-300">By Daniel Bilbao (Special Guest)</p>
+                            </div>
+                            <span class="text-sm font-semibold px-3 py-1 rounded-full ml-4 flex-shrink-0 text-black" style="background-color: var(--color-green-x);">FREE</span>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>Write a clear and compelling first draft of your YC application.</li>
+                                <li>What YC looks for: team, problem, solution, market, traction.</li>
+                                <li>Live writing of 3 key application answers.</li>
+                                <li>Common mistakes and how to avoid them.</li>
+                                <li>Application and interview workshop: the toughest questions a YC partner will ask you.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-auto md:mr-0">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 2: Should You Raise Capital? Understanding the Fundraising Process</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>When a startup is not VC-backable.</li>
+                                <li>When it’s better to raise from angels vs. other options (bootstrapping, revenue-based financing).</li>
+                                <li>Real expectations: time, rejection, iteration.</li>
+                                <li>Funding stages (Pre-Seed to Series A), realistic metrics (no hype).</li>
+                                <li>Understanding the full pipeline: first message, deck &rarr; meetings &rarr; due diligence &rarr; wire &rarr; money in the bank.</li>
+                                <li>Anatomy of the process and players (angels vs VCs, pros & cons).</li>
+                                <li>Ideal fundraising timeline, and timeline for YC accelerators.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-0 md:mr-auto">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 3: The Fundraising Process & Types of Funds</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>Understanding Fund Economics and why VCs need 100x outcomes—adjust your narrative accordingly.</li>
+                                <li>Types of venture funds and how they work: LPs, time horizons, “1–2 winners” model.</li>
+                                <li>Valuation: driven by supply and demand; pre-money vs post-money.</li>
+                                <li>12 questions you MUST ask a VC.</li>
+                                <li>Investor list-building and how to create your own Investor-Market Fit: thesis + research. Scoring and prioritizing 30–50 investors.</li>
+                                <li>Simulate 3 valuation scenarios and how much equity to sell at each stage (10–20% per round), dilution vs runway.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-auto md:mr-0">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 4: How to Build a Winning Pitch Deck</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>What investors actually want to hear: Pitch, Deck, Networking.</li>
+                                <li>Build a 5-10 slide deck focused on: Team / Problem / Solution / Market / Traction. Multiple deck versions + “Deck killers”: what NOT to include.</li>
+                                <li>Write and practice your elevator pitch (30–60 seconds) with proof points and clear CTA.</li>
+                                <li>Effective networking: where to meet investors and how to build real relationships even if you’re not in Silicon Valley.</li>
+                                <li>Deliverables: Pitch deck v1 (5–10 slides) + elevator pitch script.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-0 md:mr-auto">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 5: How to Use AI to Raise Capital</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>Best practices and AI tools for fundraising: e.g. DocSend.</li>
+                                <li>How to use AI Agents while still building human connection in cold outreach &rarr; warm intros.</li>
+                                <li>Build your Investor CRM Funnel with 30 segmented leads (angels / VCs / operators).</li>
+                                <li>AI prompts to write the 3 key investor emails that actually get opened. Metrics and follow-up cadence.</li>
+                                <li>Tool: Practice with an AI “Angel Investor” (building our own GPT to simulate investor conversations).</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-auto md:mr-0">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 6: Costly Mistakes and How to Avoid Them</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>Avoid bad dilution with SAFEs, cap tables, and option pools—how to structure healthy equity.</li>
+                                <li>SAFE post-money vs priced round (clear cap table implications).</li>
+                                <li>Close legal/tax gaps: Delaware C-Corp + QSBS benefits for founders and investors.</li>
+                                <li>Real case red flags: asking for 100k incorrectly, underestimating dilution, outsourced tech teams, nonsensical valuations, etc.</li>
+                                <li>Simulation of tough Q&A (typical early-stage VC questions).</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-0 md:mr-auto">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 7: After the Pitch – Due Diligence, Data Room & Closing</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>What happens after the “yes”, the due diligence process: what investors ask for and when.</li>
+                                <li>Preparing a lightweight data room, legal checklist, key documents (Bylaws, Cap Table, Option Plan, 409A if applicable).</li>
+                                <li>Reverse due diligence: researching the investor (do this before accepting their money).</li>
+                                <li>How to create urgency and FOMO credibly without burning relationships (timelines, soft commits, insider terms).</li>
+                                <li>Investor updates and newsletters — including to those who said no.</li>
+                                </ul>
+                        </div>
+                    </details>
+
+                    <details class="curriculum-details w-full md:ml-auto md:mr-0">
+                        <summary class="module-summary-custom flex items-start justify-between cursor-pointer text-white">
+                            <h3 class="text-2xl font-bold text-white mb-1">Module 8: Success Stories + Live Pitch Lab</h3>
+                        </summary>
+                        <div class="module-content pt-4 mt-2 border-t border-gray-700">
+                            <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                                <li>Case studies of founders who successfully raised capital.</li>
+                                <li>Live pitching + tough Q&A.</li>
+                                <li>Mentorship sessions.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <div class="p-6 rounded-xl shadow-xl border-l-4 w-full max-w-4xl mt-10" style="background-color: var(--color-beige-growth); color: var(--color-black-power); border-left-color: var(--color-green-x);">
+                        <h3 class="text-2xl font-bold mb-2">Virtual Demo Day (The Finale)</h3>
+                        <p class="text-lg">Direct feedback from VCs and angel investors on your pitch and Q&A performance.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TESTIMONIALS SECTION -->
+        <section class="py-16 bg-black border-b border-gray-800">
+            <div class="max-w-6xl mx-auto container-padding text-center">
+                <h2 class="text-4xl font-extrabold text-white mb-4"><span class="accent-green">They Raised Capital.</span> You Can Too.</h2>
+                <p class="text-xl text-gray-400 mb-12">Hear from founders who successfully applied the playbook and secured their funding rounds.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card flex flex-col justify-between">
+                        <p class="text-xl font-medium italic text-white mb-6">
+                            "The process simulation was game-changing. I walked into my first VC meeting completely prepared. We closed our pre-seed round 2 weeks later."
+                        </p>
+                        <div>
+                            <p class="text-lg font-bold accent-green">Marcus L.</p>
+                            <p class="text-sm text-gray-400">CEO, MedLink</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-card flex flex-col justify-between">
+                        <p class="text-xl font-medium italic text-white mb-6">
+                            "I stopped wasting time on generic decks and built a highly targeted, metric-driven narrative. The clarity alone attracted 3 new lead investors."
+                        </p>
+                        <div>
+                            <p class="text-lg font-bold accent-green">Sofia R.</p>
+                            <p class="text-sm text-gray-400">Founder, AgriSense AI</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-card flex flex-col justify-between">
+                        <p class="text-xl font-medium italic text-white mb-6">
+                            "The modules on SAFE structure and dilution saved us from making critical early-stage mistakes. This is the real, unvarnished truth about equity."
+                        </p>
+                        <div>
+                            <p class="text-lg font-bold accent-green">Chen W.</p>
+                            <p class="text-sm text-gray-400">CTO, DataWave</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 7. AI TOOLBOX (BETA) SECTION - INTERACTIVE -->
+        <section class="py-16" style="background-color: var(--color-grey-vibration);">
+            <div class="max-w-4xl mx-auto container-padding text-center">
+                <h2 class="text-4xl font-extrabold text-white mb-4 accent-green uppercase">AI TOOLBOX (BETA)</h2>
+                <p class="text-xl text-gray-200 mb-8">Experiment with Gemini's AI integration to improve your fundraising strategy.</p>
+
+                <!-- Tool Tabs -->
+                <div class="flex flex-wrap justify-center mb-6 border-b border-gray-700">
+                    <button class="tab-button p-3 mx-2 md:mx-4 active" data-tool="simulator">🧠 Investor Simulator</button>
+                    <button class="tab-button p-3 mx-2 md:mx-4" data-tool="critique">📈 Pitch Critique</button>
+                    <button class="tab-button p-3 mx-2 md:mx-4" data-tool="trends">🌐 Trend Analysis</button>
+                    <button class="tab-button p-3 mx-2 md:mx-4" data-tool="dd-generator">📋 DD Questions</button>
+                </div>
+
+                <!-- Tool Content Container -->
+                <div id="tool-content-container" class="tool-card text-left">
+                    <!-- Dynamic content will be injected here -->
+                </div>
+
+                <!-- Result Container -->
+                <div id="tool-result-container" class="mt-8 p-4 rounded-xl text-left hidden" style="background-color: var(--color-black-power);">
+                    <h3 class="text-xl font-bold mb-2 accent-green">Result:</h3>
+                    <div id="tool-result-output" class="text-gray-200 whitespace-pre-wrap"></div>
+                    <div id="tool-result-sources" class="mt-4 text-xs text-gray-400"></div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loading-indicator" class="hidden mt-8 flex justify-center items-center space-x-3 text-white">
+                    <div class="spinner"></div>
+                    <span>Loading AI response...</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 8. Final CTA Section (Stop Guessing. Start Raising.) -->
+        <section id="apply-now" class="py-20 md:py-32 bg-black">
+            <div class="max-w-4xl mx-auto container-padding text-center">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-6">
+                    Stop Guessing. Start <span class="accent-green">Raising.</span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-8">
+                    The next cohort begins **November 25th**. With limited slots and a 100% money-back guarantee, you will be prepared to raise capital.
+                </p>
+
+                <div class="p-8 rounded-xl shadow-2xl" style="background-color: var(--color-grey-vibration);">
+                    <p class="text-4xl font-extrabold text-white mb-2">
+                        Price: <span class="accent-green">$1,450 USD</span>
+                    </p>
+                    
+                    <a href="#" class="cta-button inline-block w-full sm:w-auto px-16 py-5 text-2xl font-bold rounded-xl shadow-lg transform transition-all duration-300 mt-4">
+                        APPLY NOW TO START SELECTION PROCESS
+                    </a>
+                </div>
+
+                <p class="text-base text-gray-500 mt-6">
+                    Need help? Ask about our half-scholarship program before Nov 20th.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto container-padding text-center text-gray-400 text-sm">
+            <p>&copy; 2024 Fundraising School by 30X. All Rights Reserved. | Program dates: Nov 25th - Dec 13th, 2024.</p>
+            <p class="mt-2">All proceeds fund the development of AI tools for early-stage founders.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR AI TOOLS -->
+    <script type="module">
+        // Global variables for Firebase/Auth (required by environment, though not used by LLM call)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // --- API CONFIGURATION ---
+        const API_KEY = ""; // Canvas will inject the key
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+        const MAX_RETRIES = 5;
+
+        // --- UI ELEMENTS ---
+        const toolContentContainer = document.getElementById('tool-content-container');
+        const toolResultContainer = document.getElementById('tool-result-container');
+        const toolResultOutput = document.getElementById('tool-result-output');
+        const toolResultSources = document.getElementById('tool-result-sources');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        
+        // --- STATE ---
+        let currentTool = 'simulator'; // Default tool
+
+        // --- CORE API FUNCTION WITH EXPONENTIAL BACKOFF ---
+        async function apiCall(payload, retries = 0) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429 && retries < MAX_RETRIES) {
+                        const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return apiCall(payload, retries + 1);
+                    }
+                    throw new Error(`API Request failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (!candidate) {
+                    throw new Error("No candidate was returned from the API.");
+                }
+
+                // Extract text
+                const text = candidate.content?.parts?.[0]?.text || 'Response could not be generated.';
+
+                // Extract grounding sources
+                let sources = [];
+                const groundingMetadata = candidate.groundingMetadata;
+                if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                    sources = groundingMetadata.groundingAttributions
+                        .map(attribution => ({
+                            uri: attribution.web?.uri,
+                            title: attribution.web?.title,
+                        }))
+                        .filter(source => source.uri && source.title);
+                }
+
+                return { text, sources, candidate };
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                throw new Error("An error occurred communicating with the AI. Please try again.");
+            }
+        }
+
+        // --- UI HANDLERS ---
+        function showLoading(show) {
+            loadingIndicator.classList.toggle('hidden', !show);
+            toolResultContainer.classList.add('hidden');
+        }
+
+        function displayResult(text, sources) {
+            toolResultOutput.innerHTML = text.replace(/\n/g, '<br>'); // Preserve newlines
+            
+            toolResultSources.innerHTML = '';
+            if (sources && sources.length > 0) {
+                const sourceHtml = sources.map((s, index) => 
+                    `<a href="${s.uri}" target="_blank" class="hover:text-white underline">${s.title}</a>`
+                ).join(' | ');
+                toolResultSources.innerHTML = `**Grounding Sources (Google Search):** ${sourceHtml}`;
+            }
+
+            toolResultContainer.classList.remove('hidden');
+        }
+
+        function displayError(message) {
+            toolResultOutput.innerHTML = `<p class="text-red-400 font-semibold">Error: ${message}</p>`;
+            toolResultSources.innerHTML = '';
+            toolResultContainer.classList.remove('hidden');
+        }
+        
+        // --- TOOL DEFINITIONS ---
+
+        const tools = {
+            'simulator': {
+                name: '🧠 Investor Simulator',
+                description: 'Practice your pitch against an AI VC. Receive one difficult question based on metrics.',
+                render: () => `
+                    <p class="text-lg font-semibold mb-3">Enter your Elevator Pitch (max. 200 words):</p>
+                    <textarea id="pitch-input-sim" rows="6" class="w-full p-3 rounded-lg bg-black text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-x" placeholder="E.g.: We are a B2B SaaS platform that uses AI to reduce employee turnover by 40% for companies in the healthcare industry. We already have 10 paying customers and $120K ARR."></textarea>
+                    <button onclick="window.runSimulator()" class="mt-4 px-6 py-3 rounded-xl font-bold bg-green-x text-black hover:bg-white transition-colors">
+                        Get Critical VC Question
+                    </button>
+                `,
+                run: async () => {
+                    const pitch = document.getElementById('pitch-input-sim').value;
+                    if (!pitch) return displayError("Please enter your pitch to start the simulation.");
+
+                    const systemPrompt = "Act as a highly skeptical, metrics-focused seed-stage Venture Capitalist. Given the following presentation (pitch), respond with ONE SINGLE, difficult, and very specific skeptical question or criticism about the business model or traction. Do not be encouraging. Always respond with the VC persona, directly with the question.";
+                    const userQuery = `Pitch: ${pitch}`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                    };
+                    
+                    showLoading(true);
+                    try {
+                        const { text } = await apiCall(payload);
+                        displayResult(text, null);
+                    } catch (error) {
+                        displayError(error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                }
+            },
+            'critique': {
+                name: '📈 Structured Pitch Critique',
+                description: 'Get an objective scorecard with structured feedback on your Elevator Pitch.',
+                render: () => `
+                    <p class="text-lg font-semibold mb-3">Enter your Elevator Pitch (max. 100 words):</p>
+                    <textarea id="pitch-input-critique" rows="4" class="w-full p-3 rounded-lg bg-black text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-x" placeholder="E.g.: We are the AI that personalizes education for children with dyslexia, achieving 3x more progress than traditional methods. We are seeking $500K to scale to 10,000 paying users."></textarea>
+                    <button onclick="window.runCritique()" class="mt-4 px-6 py-3 rounded-xl font-bold bg-green-x text-black hover:bg-white transition-colors">
+                        Generate Scorecard
+                    </button>
+                `,
+                run: async () => {
+                    const pitch = document.getElementById('pitch-input-critique').value;
+                    if (!pitch) return displayError("Please enter your pitch for analysis.");
+
+                    const userQuery = `Analyze the following Elevator Pitch and provide a critique and score (on a scale of 1 to 10) based on three criteria: Clarity (Is the problem/solution obvious?), Impact (Does it highlight 100x growth potential and market size?), and Conciseness (Is it readable in under 60 seconds?). Return the result in JSON format. Pitch: ${pitch}`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "ARRAY",
+                                description: "Pitch scorecard and critique.",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        "criterion": { "type": "STRING", "description": "Name of the criterion (Clarity, Impact, Conciseness)." },
+                                        "score_1_10": { "type": "INTEGER", "description": "Score from 1 to 10." },
+                                        "feedback": { "type": "STRING", "description": "Specific and concise feedback for improvement in this criterion." }
+                                    },
+                                    "required": ["criterion", "score_1_10", "feedback"]
+                                }
+                            }
+                        }
+                    };
+
+                    showLoading(true);
+                    try {
+                        const { text } = await apiCall(payload);
+                        const data = JSON.parse(text);
+                        
+                        let resultHtml = '<div class="space-y-4">';
+                        let totalScore = 0;
+                        
+                        data.forEach(item => {
+                            totalScore += item.score_1_10;
+                            resultHtml += `
+                                <div class="p-3 rounded-lg" style="background-color: #333434;">
+                                    <h4 class="text-xl font-bold accent-green">${item.criterion} (Score: ${item.score_1_10}/10)</h4>
+                                    <p class="text-gray-300 mt-1">${item.feedback}</p>
+                                </div>
+                            `;
+                        });
+                        
+                        const averageScore = (totalScore / data.length).toFixed(1);
+                        resultHtml += `<p class="text-2xl font-extrabold mt-6 text-center">Average Score: <span class="accent-green">${averageScore}/10</span></p>`;
+                        resultHtml += '</div>';
+
+                        displayResult(resultHtml, null);
+                    } catch (error) {
+                        displayError("Error processing the structured JSON. Please ensure your pitch is clear and try again.");
+                    } finally {
+                        showLoading(false);
+                    }
+                }
+            },
+            'trends': {
+                name: '🌐 Real-Time Trend Analysis',
+                description: 'Get a summary of the investment thesis, valuation, and risks for your industry, using current web data.',
+                render: () => `
+                    <div class="space-y-4">
+                        <label class="block text-lg font-semibold" for="industry-input">Sector/Industry:</label>
+                        <input type="text" id="industry-input" class="w-full p-3 rounded-lg bg-black text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-x" placeholder="E.g.: B2B Fintech for SMBs">
+
+                        <label class="block text-lg font-semibold" for="stage-select">Funding Stage:</label>
+                        <select id="stage-select" class="w-full p-3 rounded-lg bg-black text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-x">
+                            <option value="Pre-Seed">Pre-Seed ($100K - $500K)</option>
+                            <option value="Seed" selected>Seed ($500K - $3M)</option>
+                            <option value="Series A">Series A ($3M - $15M)</option>
+                        </select>
+                    </div>
+                    <button onclick="window.runTrendAnalysis()" class="mt-6 px-6 py-3 rounded-xl font-bold bg-green-x text-black hover:bg-white transition-colors">
+                        Analyze Trends Now
+                    </button>
+                `,
+                run: async () => {
+                    const industry = document.getElementById('industry-input').value;
+                    const stage = document.getElementById('stage-select').value;
+                    if (!industry) return displayError("Please enter a sector/industry.");
+
+                    const systemPrompt = "Act as a venture capital market analyst. Based on the most recent web data, provide a concise single-paragraph summary of the current investment thesis, typical valuation ranges, and the most critical risk factors for a startup in the specified sector and funding stage.";
+                    const userQuery = `Sector: ${industry}. Funding Stage: ${stage}.`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        tools: [{ "google_search": {} }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                    };
+
+                    showLoading(true);
+                    try {
+                        const { text, sources } = await apiCall(payload);
+                        displayResult(text, sources);
+                    } catch (error) {
+                        displayError(error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                }
+            },
+            'dd-generator': {
+                name: '📋 Due Diligence Question Generator',
+                description: 'Generate a set of the most common and challenging Due Diligence questions to prepare you.',
+                render: () => `
+                    <div class="space-y-4">
+                        <label class="block text-lg font-semibold" for="sector-input-dd">Sector/Industry:</label>
+                        <input type="text" id="sector-input-dd" class="w-full p-3 rounded-lg bg-black text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-x" placeholder="E.g.: EdTech, E-commerce, Deep Tech">
+
+                        <label class="block text-lg font-semibold" for="stage-select-dd">Funding Stage:</label>
+                        <select id="stage-select-dd" class="w-full p-3 rounded-lg bg-black text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-x">
+                            <option value="Pre-Seed">Pre-Seed</option>
+                            <option value="Seed" selected>Seed</option>
+                            <option value="Series A">Series A</option>
+                        </select>
+                    </div>
+                    <button onclick="window.runDDGenerator()" class="mt-6 px-6 py-3 rounded-xl font-bold bg-green-x text-black hover:bg-white transition-colors">
+                        Generate DD Questions
+                    </button>
+                `,
+                run: async () => {
+                    const sector = document.getElementById('sector-input-dd').value;
+                    const stage = document.getElementById('stage-select-dd').value;
+                    if (!sector) return displayError("Please enter a sector/industry.");
+
+                    const systemPrompt = "You are a Due Diligence Partner. Generate a list of the 5 most critical, common, and challenging questions you would ask a startup in the provided sector and funding stage. Present them as a numbered list with a concise title.";
+                    const userQuery = `Sector: ${sector}. Funding Stage: ${stage}.`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                    };
+                    
+                    showLoading(true);
+                    try {
+                        const { text } = await apiCall(payload);
+                        displayResult(text, null);
+                    } catch (error) {
+                        displayError(error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                }
+            }
+        };
+
+        // Expose run functions globally for inline HTML onclick handlers
+        window.runSimulator = tools.simulator.run;
+        window.runCritique = tools.critique.run;
+        window.runTrendAnalysis = tools.trends.run;
+        window.runDDGenerator = tools['dd-generator'].run;
+
+
+        // --- TAB SWITCHING LOGIC ---
+        function switchTool(toolKey) {
+            currentTool = toolKey;
+            toolResultContainer.classList.add('hidden');
+            loadingIndicator.classList.add('hidden');
+
+            // 1. Update active tab styling
+            tabButtons.forEach(button => {
+                button.classList.toggle('active', button.dataset.tool === toolKey);
+            });
+
+            // 2. Render tool content
+            toolContentContainer.innerHTML = tools[toolKey].render();
+        }
+
+        // Initialize listeners
+        tabButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                switchTool(event.target.dataset.tool);
+            });
+        });
+
+        // Initialize with the first tool
+        window.onload = () => {
+            switchTool(currentTool);
+        };
+
+    </script>
+</body>
+</html>
